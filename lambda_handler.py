@@ -7,7 +7,6 @@ table = dynamodb.Table(tableName)
 
 def lambda_handler(event, context):
     print('Line11', event)
-    id= event['queryStringParameters']['ID']
     body = None
     statusCode = 200
     headers = {
@@ -15,6 +14,7 @@ def lambda_handler(event, context):
     }
     try:
         if event['routeKey'] == "DELETE /items/{ID}":
+            id= event['queryStringParameters']['ID']
             response= table.delete_item(
                 Key={
                     "ID": id
@@ -23,6 +23,7 @@ def lambda_handler(event, context):
             body = f"Deleted item {event['queryStringParameters']['ID']}"
 
         elif event["routeKey"] == "GET /items/{ID}":
+            id= event['queryStringParameters']['ID']
             response = table.get_item(
                 Key={
                     "ID": id
@@ -53,4 +54,6 @@ def lambda_handler(event, context):
         "headers": headers,
         "body": json.dumps(body)
     }
+
+
 
